@@ -1,0 +1,9 @@
+.*
+test/
+*.json
+.gitignore
+travis.yml
+*.md
+node_modules/
+.versions
+.DS_Store

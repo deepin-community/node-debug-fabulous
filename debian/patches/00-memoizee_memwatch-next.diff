@@ -1,0 +1,164 @@
+Description: Patch away dependencies on memoizee and memwatch-next
+Forwarded: not-needed
+Author: Paolo Greppi <paolo.greppi@libpf.com>
+
+Index: node-debug-fabulous/src/lazy-eval.js
+===================================================================
+--- node-debug-fabulous.orig/src/lazy-eval.js
++++ node-debug-fabulous/src/lazy-eval.js
+@@ -1,5 +1,4 @@
+ var objectAssign = require('object-assign');
+-var memoize = require('memoizee');
+ 
+ function _resolveOutput(func, bindThis) {
+   var wrapped = function() {
+@@ -36,7 +35,7 @@ function wrapEval(_debug) {
+     return _resolveOutput(instance);
+   }
+ 
+-  var debugMemoized = memoize(debug);
++  var debugMemoized = debug;
+ 
+   objectAssign(debugMemoized, debugOrig);
+ 
+Index: node-debug-fabulous/test/index.test.js
+===================================================================
+--- node-debug-fabulous.orig/test/index.test.js
++++ node-debug-fabulous/test/index.test.js
+@@ -1,16 +1,6 @@
+ 'use strict';
+ var expect = require('chai').expect;
+ var hook = require('hook-std');
+-var memwatch = require('memwatch-next');
+-
+-memwatch.on('leak', function(info) {
+-  console.log("LEAK");
+-  console.log(info);
+-  throw new Error("there is a LEAK");
+-  process.exit(500);
+-});
+-
+-var heapDiff = new memwatch.HeapDiff();
+ 
+ describe('index / spawn', function () {
+ 
+@@ -21,15 +11,6 @@ describe('index / spawn', function () {
+   })
+ 
+   after(function(){
+-    var hde = heapDiff.end();
+-    var change = hde.change;
+-    change.details = null;
+-
+-    console.log(JSON.stringify({
+-      before: hde.before,
+-      after: hde.after,
+-      change: change
+-    }, null, 2));
+     console.log("index.test.js Total time: " + (Date.now() - date));
+   })
+ 
+Index: node-debug-fabulous/test/perf/perfWith.js
+===================================================================
+--- node-debug-fabulous.orig/test/perf/perfWith.js
++++ node-debug-fabulous/test/perf/perfWith.js
+@@ -6,9 +6,6 @@ const debug = require('../../')
+   .spawnable(require('../../package.json').name)
+   .spawn('perf');
+ 
+-var memwatch = require('memwatch-next');
+-var heapDiff = new memwatch.HeapDiff();
+-
+ let start = process.hrtime();
+ 
+ function elapsedTime() {
+@@ -20,11 +17,6 @@ function elapsedTime() {
+ }
+ 
+ function endTest() {
+-  var hde = heapDiff.end();
+-  var change = hde.change;
+-  change.details = null;
+-
+-  console.log('change.size: ' + change.size);
+   console.log("perfWithout.js Total time: " + elapsedTime());
+ }
+ 
+@@ -34,4 +26,4 @@ fs.createReadStream(__dirname + '/crashe
+     debug(() => json.length);
+     debug(() => json)
+   })
+-  .on('end', () => endTest());
+\ No newline at end of file
++  .on('end', () => endTest());
+Index: node-debug-fabulous/test/perf/perfWithout.js
+===================================================================
+--- node-debug-fabulous.orig/test/perf/perfWithout.js
++++ node-debug-fabulous/test/perf/perfWithout.js
+@@ -4,9 +4,6 @@ const fs = require('fs');
+ const JSONStream = require('JSONStream');
+ const debug = require('debug')(require('../../package.json').name + ':perf');
+   
+-var memwatch = require('memwatch-next');
+-var heapDiff = new memwatch.HeapDiff();
+-
+ let start = process.hrtime();
+ 
+ function elapsedTime() {
+@@ -18,11 +15,6 @@ function elapsedTime() {
+ }
+ 
+ function endTest() {
+-  var hde = heapDiff.end();
+-  var change = hde.change;
+-  change.details = null;
+-
+-  console.log('change.size: ' + change.size);
+   console.log("perfWithout.js Total time: " + elapsedTime());
+ }
+ 
+@@ -32,4 +24,4 @@ fs.createReadStream(__dirname + '/crashe
+     debug(json.length);
+     debug(json)
+   })
+-  .on('end', () => endTest());
+\ No newline at end of file
++  .on('end', () => endTest());
+Index: node-debug-fabulous/test/src/lazy-eval.test.js
+===================================================================
+--- node-debug-fabulous.orig/test/src/lazy-eval.test.js
++++ node-debug-fabulous/test/src/lazy-eval.test.js
+@@ -1,17 +1,7 @@
+ var expect = require('chai').expect;
+ var hook = require('hook-std');
+-var memwatch = require('memwatch-next');
+ var debugFact = require('../../src/debugFabFactory')();
+ 
+-memwatch.on('leak', function(info) {
+-  console.log("LEAK");
+-  console.log(info);
+-  throw new Error("there is a LEAK");
+-  process.exit(500);
+-});
+-
+-var heapDiff = new memwatch.HeapDiff();
+-
+ describe('lazy-eval', function () {
+ 
+   var debug, unhook, date;
+@@ -21,15 +11,6 @@ describe('lazy-eval', function () {
+   })
+ 
+   after(function(){
+-    var hde = heapDiff.end();
+-    var change = hde.change;
+-    change.details = null;
+-
+-    console.log(JSON.stringify({
+-      before: hde.before,
+-      after: hde.after,
+-      change: change
+-    }, null, 2));
+     console.log("lazy-eval-test.js Total time: " + (Date.now() - date));
+   })
+ 

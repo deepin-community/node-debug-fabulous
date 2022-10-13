@@ -1,0 +1,58 @@
+node-debug-fabulous (1.1.0-3) unstable; urgency=medium
+
+  * Team upload
+
+  [ Debian Janitor ]
+  * Remove constraints unnecessary since buster:
+    + Build-Depends: Drop versioned constraint on node-debug.
+    + node-debug-fabulous: Drop versioned constraint on node-debug in Depends.
+
+  [ Yadd ]
+  * Update standards version to 4.6.0, no changes needed.
+  * Fix filenamemangle
+  * Drop dependency to nodejs
+  * Mark test dependencies with <!nocheck>
+
+ -- Yadd <yadd@debian.org>  Mon, 08 Nov 2021 17:18:45 +0100
+
+node-debug-fabulous (1.1.0-2) unstable; urgency=medium
+
+  * Team upload
+
+  [ Debian Janitor ]
+  * Trim trailing whitespace.
+  * Bump debhelper from old 11 to 12.
+  * Set debhelper-compat version in Build-Depends.
+  * Set upstream metadata fields: Repository.
+
+  [ Xavier Guimard ]
+  * Declare compliance with policy 4.5.0
+  * Use pkg-js-tools auto test & install
+  * Add "Rules-Requires-Root: no"
+  * Add debian/gbp.conf
+  * Bump debhelper compatibility level to 13
+  * Use dh-sequence-nodejs
+  * Declare compliance with policy 4.5.1
+  * Modernize debian/watch
+  * Add fix for node-hook-std ≥ 2 (Closes: #978363)
+
+ -- Xavier Guimard <yadd@debian.org>  Sun, 27 Dec 2020 10:12:09 +0100
+
+node-debug-fabulous (1.1.0-1) unstable; urgency=medium
+
+  * Team upload.
+
+  * Update Vcs fields for migration to https://salsa.debian.org/
+  * Bump standard version
+  * Bump debhelper compat
+  * New upstream version
+  * Update copyright and dependencies
+  * Patch away dependencies on memoizee and memwatch-next
+
+ -- Paolo Greppi <paolo.greppi@libpf.com>  Thu, 26 Apr 2018 12:21:59 +0200
+
+node-debug-fabulous (0.0.4-1) unstable; urgency=low
+
+  * Initial release (Closes: #847730)
+
+ -- Sruthi Chandran <srud@disroot.org>  Sun, 11 Dec 2016 12:17:22 +0530

@@ -1,0 +1,29 @@
+Source: node-debug-fabulous
+Section: javascript
+Priority: optional
+Maintainer: Debian Javascript Maintainers <pkg-javascript-devel@lists.alioth.debian.org>
+Uploaders: Sruthi Chandran <srud@disroot.org>
+Build-Depends: chai
+ , debhelper-compat (= 13)
+ , dh-sequence-nodejs
+ , mocha <!nocheck>
+ , node-debug <!nocheck>
+ , node-hook-std (>= 2) <!nocheck>
+ , node-object-assign <!nocheck>
+Standards-Version: 4.6.0
+Vcs-Browser: https://salsa.debian.org/js-team/node-debug-fabulous
+Vcs-Git: https://salsa.debian.org/js-team/node-debug-fabulous.git
+Homepage: https://github.com/nmccready/debug-fabulous
+Testsuite: autopkgtest-pkg-nodejs
+Rules-Requires-Root: no
+
+Package: node-debug-fabulous
+Architecture: all
+Depends: ${misc:Depends}
+ , node-debug
+ , node-object-assign
+Description: visionmedia debug extensions rolled into one
+ Wrapper / Extension around visionmedia's debug to allow lazy evaluation of
+ debugging via closure handling.
+ .
+ Node.js is an event-based server-side JavaScript engine.
